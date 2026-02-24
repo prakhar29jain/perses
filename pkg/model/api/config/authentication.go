@@ -136,7 +136,8 @@ type K8sAuthnProvider struct {
 }
 
 type OIDCLogout struct {
-	Enabled bool `json:"enabled" yaml:"enabled"`
+	Enabled                 bool   `json:"enabled" yaml:"enabled"`
+	LogoutRedirectParamName string `json:"logout_redirect_param_name,omitempty" yaml:"logout_redirect_param_name,omitempty"`
 }
 
 type OIDCProvider struct {
