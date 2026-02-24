@@ -68,6 +68,8 @@ type DashboardSpec struct {
 	Duration common.DurationString `json:"duration" yaml:"duration"`
 	// RefreshInterval is the default refresh interval to use when landing on the dashboard
 	RefreshInterval common.DurationString `json:"refreshInterval,omitempty" yaml:"refreshInterval,omitempty"`
+	// Links is an optional list of links to display at the dashboard level
+	Links []Link `json:"links,omitempty" yaml:"links,omitempty"`
 }
 
 func (d *DashboardSpec) UnmarshalJSON(data []byte) error {
