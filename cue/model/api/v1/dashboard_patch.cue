@@ -42,6 +42,7 @@ import (
 	layouts: [...dashboard.#Layout] @go(Layouts,[]Layout)
 	duration:         common.#Duration | *"1h" @go(Duration)
 	refreshInterval?: common.#Duration         @go(RefreshInterval)
+	links?: [...#Link] @go(Links,[]Link)
 }
 
 #Dashboard: {
