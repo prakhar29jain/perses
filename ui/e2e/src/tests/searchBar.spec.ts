@@ -53,29 +53,36 @@ test.describe('SearchBar', () => {
     await expect(searchBar.getDashboardsHeading()).toBeVisible();
 
     await searchBar.close();
+    await expect(searchBar.modal).toBeHidden();
   });
 
-  test('highlights important dashboards in search results while non-important remain unhighlighted', async ({ page }) => {
+  test('highlights important dashboards in search results while non-important remain unhighlighted', async ({
+    page,
+  }) => {
     const homePage = new AppHomePage(page);
     await homePage.goto();
 
     const searchBar = new SearchBar(page);
     await searchBar.open();
 
-    // Search for "Panel" which matches both important (StatChartPanel) and non-important (GaugeChartPanel) dashboards
-    await searchBar.search('Panel');
+    // Search for "panel" which matches both important (markdownpanel) and non-important (timeserieschartpanel) dashboards
+    await searchBar.search('panel');
+
+    // Click "see more..." if present to load additional results
+    await searchBar.clickSeeMoreIfPresent();
 
     await expect(searchBar.getDashboardsHeading()).toBeVisible();
 
-    const importantDashboard = searchBar.getDashboardLink('testing', 'statchartpanel');
+    const importantDashboard = searchBar.getDashboardLink('testing', 'markdownpanel');
     await expect(importantDashboard).toBeVisible();
     await expect(importantDashboard).toHaveCSS('font-weight', '900');
 
-    // GaugeChartPanel is NOT in the important_dashboards list
-    const nonImportantDashboard = searchBar.getDashboardLink('testing', 'gaugechartpanel');
+    // timeserieschartpanel is NOT in the important_dashboards list
+    const nonImportantDashboard = searchBar.getDashboardLink('testing', 'timeserieschartpanel');
     await expect(nonImportantDashboard).toBeVisible();
     await expect(nonImportantDashboard).toHaveCSS('font-weight', '400');
 
     await searchBar.close();
+    await expect(searchBar.modal).toBeHidden();
   });
 });

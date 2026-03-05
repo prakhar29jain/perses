@@ -59,4 +59,15 @@ export class SearchBar {
   getNoResultsMessage(query: string): Locator {
     return this.modal.getByText(new RegExp(`No records found for ${query}`));
   }
+
+  getSeeMoreButton(): Locator {
+    return this.modal.getByRole('button', { name: /see more\.\.\./i });
+  }
+
+  async clickSeeMoreIfPresent(): Promise<void> {
+    const seeMoreButton = this.getSeeMoreButton();
+    if (await seeMoreButton.isVisible()) {
+      await seeMoreButton.click();
+    }
+  }
 }
