@@ -36,6 +36,21 @@ frontend:
   enable_keyboard_shortcuts: true
   explorer:
     enable: true
+  bot:
+    base_url: "http://127.0.0.1:8001"
+    endpoints:
+      ask:
+        path: "/ask"
+        method: "GET"
+      stream:
+        path: "/ask/stream"
+        method: "GET"
+      reset:
+        path: "/reset"
+        method: "GET"
+      health:
+        path: "/health"
+        method: "GET"
 
   important_dashboards:
     - project: "perses"

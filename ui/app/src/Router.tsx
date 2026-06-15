@@ -30,6 +30,7 @@ import {
 } from './context/Config';
 import { DarkModeContextProvider } from './context/DarkMode';
 import { NavHistoryProvider } from './context/DashboardNavHistory';
+import { BotProvider } from './context/Bot';
 import {
   AdminRoute,
   ConfigRoute,
@@ -92,7 +93,9 @@ function AppProviders(): ReactElement {
                 <NavHistoryProvider>
                   <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                     <AuthorizationProvider>
-                      <App />
+                      <BotProvider>
+                        <App />
+                      </BotProvider>
                     </AuthorizationProvider>
                   </SnackbarProvider>
                 </NavHistoryProvider>

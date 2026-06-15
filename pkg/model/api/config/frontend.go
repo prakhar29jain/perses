@@ -16,6 +16,7 @@ package config
 import (
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/perses/spec/go/common"
 )
@@ -61,6 +62,42 @@ type TimeRange struct {
 	Options                []common.DurationString `json:"options,omitempty" yaml:"options,omitempty"`
 }
 
+type BotEndpoint struct {
+	Path   string `json:"path" yaml:"path"`
+	Method string `json:"method,omitempty" yaml:"method,omitempty"`
+}
+
+func (b *BotEndpoint) Verify() error {
+	if len(strings.TrimSpace(b.Path)) == 0 {
+		return fmt.Errorf("frontend.bot.endpoints path is required")
+	}
+	b.Method = strings.ToUpper(strings.TrimSpace(b.Method))
+	if len(b.Method) == 0 {
+		b.Method = "GET"
+	}
+	if b.Method != "GET" {
+		return fmt.Errorf("frontend.bot endpoints only support GET for now")
+	}
+	return nil
+}
+
+type Bot struct {
+	BaseURL   string                  `json:"base_url,omitempty" yaml:"base_url,omitempty"`
+	Endpoints map[string]*BotEndpoint `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
+}
+
+func (b *Bot) Verify() error {
+	for endpointName, endpoint := range b.Endpoints {
+		if endpoint == nil {
+			return fmt.Errorf("frontend.bot.endpoints.%s cannot be null", endpointName)
+		}
+		if err := endpoint.Verify(); err != nil {
+			return fmt.Errorf("frontend.bot.endpoints.%s: %w", endpointName, err)
+		}
+	}
+	return nil
+}
+
 func (t *TimeRange) Verify() error {
 	if len(t.Options) == 0 {
 		t.Options = defaultTimeRangeOptions
@@ -84,4 +121,6 @@ type Frontend struct {
 	TimeRange *TimeRange `json:"time_range,omitempty" yaml:"time_range,omitempty"`
 	// BannerInfo contains the content to be display in a banner at the top of each page along with the severity of the information
 	Banner *Banner `json:"banner,omitempty" yaml:"banner,omitempty"`
+	// Bot contains bot integration endpoints that can be configured at startup.
+	Bot *Bot `json:"bot,omitempty" yaml:"bot,omitempty"`
 }

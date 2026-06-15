@@ -181,6 +181,16 @@ export interface TimeRangeConfig {
   options?: DurationString[];
 }
 
+export interface BotEndpointConfig {
+  path: string;
+  method?: 'GET';
+}
+
+export interface FrontendBotConfig {
+  base_url?: string;
+  endpoints?: Record<string, BotEndpointConfig>;
+}
+
 export interface FrontendConfig {
   enable_keyboard_shortcuts?: boolean;
   important_dashboards?: DashboardSelector[];
@@ -188,6 +198,7 @@ export interface FrontendConfig {
   explorer: ExplorerConfig;
   time_range?: TimeRangeConfig;
   banner?: Banner;
+  bot?: FrontendBotConfig;
 }
 
 export interface EphemeralDashboardConfig {

@@ -23,6 +23,7 @@ import { DelegatedAuthnErrorRoute, SignInRoute, SignUpRoute } from './model/rout
 import { PersesLoader } from './components/PersesLoader';
 import { useIsKeyboardShortcutsEnabled } from './context/Config';
 import './i18n/i18n';
+import Bot from './Bot';
 
 function isDashboardViewRoute(pathname: string): boolean {
   return /\/projects\/[a-zA-Z0-9_]+\/dashboards\/[a-zA-Z0-9_]+/.test(pathname);
@@ -31,6 +32,10 @@ function isDashboardViewRoute(pathname: string): boolean {
 function App(): ReactElement {
   const location = useLocation();
   const isKeyboardShortcutsEnabled = useIsKeyboardShortcutsEnabled();
+  const hideApp =
+    location.pathname === SignInRoute ||
+    location.pathname === SignUpRoute ||
+    location.pathname === DelegatedAuthnErrorRoute;
 
   return (
     <Box
@@ -47,9 +52,7 @@ function App(): ReactElement {
           <ShortcutHelpModal />
         </>
       )}
-      {location.pathname !== SignInRoute &&
-        location.pathname !== SignUpRoute &&
-        location.pathname !== DelegatedAuthnErrorRoute && <Header />}
+      {!hideApp && <Header />}
 
       <Box
         sx={{
@@ -67,6 +70,7 @@ function App(): ReactElement {
         </ReactRouterProvider>
       </Box>
       {!isDashboardViewRoute(location.pathname) && <Footer />}
+      {!hideApp && <Bot />}
     </Box>
   );
 }
